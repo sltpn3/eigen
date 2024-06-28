@@ -1,4 +1,4 @@
-# Galang Suara Backend
+# EIGEN API
 
 ## Requirements.
 
