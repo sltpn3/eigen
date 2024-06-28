@@ -7,12 +7,12 @@ from datetime import datetime
 from typing import Optional
 
 
-class ProvinsiBase(BaseModel):
+class MemberBase(BaseModel):
     class Config:
         validate_assignment = True
 
 
-class MemberCreate(ProvinsiBase):
+class MemberCreate(MemberBase):
     id: int
     code: str
     name: str
@@ -21,16 +21,14 @@ class MemberCreate(ProvinsiBase):
     is_penalized: bool = False
 
 
-class MemberUpdate(ProvinsiBase):
+class MemberUpdate(MemberBase):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.__fields_set__.add('updated_at')
+        self.model_fields_set.add('updated_at')
 
     name: Optional[str]
     updated_at: datetime = Field(default_factory=current_time)
-    is_penalized: Optional[bool]
 
 
 class MemberSearch(BaseModel):
-    name_like: Optional[str]
-    is_penalized: Optional[bool]
+    name_like: Optional[str] = None
