@@ -1,8 +1,8 @@
 """member model
 
-Revision ID: 42c09874d481
+Revision ID: cbf6bde1c0d7
 Revises: 
-Create Date: 2024-06-29 05:45:38.523258
+Create Date: 2024-06-29 06:05:44.422522
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '42c09874d481'
+revision = 'cbf6bde1c0d7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,7 +24,8 @@ def upgrade():
     sa.Column('name', sa.String(length=256), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.Column('is_penalized', sa.Boolean(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
+    sa.Column('penalized_until', sa.Date(), nullable=True),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_member')),
     sa.UniqueConstraint('code', name=op.f('uq_member_code'))
     )

@@ -1,5 +1,5 @@
 from sqlalchemy import (Integer, String, Column, Boolean,
-                        DateTime, Text, Float, DECIMAL)
+                        DateTime, Text, Float, Date)
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.orm import relationship
 
@@ -14,4 +14,5 @@ class Member(Base):
     name = Column(String(256), nullable=False)
     created_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, nullable=True)
-    is_penalized = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=True)
+    penalized_until = Column(Date, nullable=True)
