@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 # from app.schemas.borrow_schema import association_table
-# from app.schemas.book_schema import Book
+from app.schemas.borrow_schema import Borrow
 
 '''DB Schema provinsi'''
 
@@ -20,8 +20,8 @@ class Member(Base):
     penalized_until = Column(Date, nullable=True)
 
     # Relationship
-    # borrows = relationship(
-    #     "Book",
-    #     secondary=association_table,
-    #     back_populates="borrowed_by")
-    
+    borrows = relationship(
+        "Borrow",
+        primaryjoin='and_(Borrow.member_id==Member.id, Borrow.is_returned==0)'
+        # secondary=association_table
+    )

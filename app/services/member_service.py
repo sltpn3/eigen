@@ -13,7 +13,7 @@ def search_member(db: Session, filters: MemberSearch, start=0, limit=10,
     
     for member in members:
         member.borrows
-        for book in member.borrows:
-            print(book)
+        for borrow in member.borrows:
+            borrow.book
 
     return members, count

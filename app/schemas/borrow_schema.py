@@ -2,6 +2,7 @@ from sqlalchemy import Integer, String, Column, Boolean, DateTime, ForeignKey, T
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
+from app.schemas.book_schema import Book
 
 '''Relationship Schemas between jaringan_relawan dan wilayah'''
 
@@ -13,3 +14,6 @@ class Borrow(Base):
         'member.id'), primary_key=True, index=True)
     date = Column(Date, nullable=False)
     is_returned = Column(Boolean, default=False)
+
+    # Relationship
+    book = relationship('Book')
