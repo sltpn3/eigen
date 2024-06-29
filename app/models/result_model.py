@@ -23,8 +23,12 @@ class ResultModel(BaseModel):
     """
 
     count: Optional[float] = None
-    data: Optional[Union[Dict[str, Any], bool, int]] = None
+    data: Optional[Union[Dict[str, Any], bool, int, List]] = None
     message: Optional[str] = None
     status: Optional[bool] = None
 
-ResultModel.update_forward_refs()
+    class Config:
+        orm_mode = True
+
+
+ResultModel.model_rebuild()

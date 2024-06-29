@@ -1,6 +1,7 @@
+from fastapi.encoders import jsonable_encoder
 from ._imports import *
 from app.models.member_model import MemberCreate, MemberUpdate, MemberSearch
-from app.services import member_service as service 
+from app.services import member_service as service
 
 import sys
 
@@ -23,12 +24,13 @@ async def search_member(
             default=None, description='<column_name> <desc/asc>. ex: name desc'),
         db: Session = Depends(get_db),
         response: Response,
-) -> ResultModel:
+):
     try:
         member, count = service.search_member(
             db, filters, start, limit, order, None)
-
-        return ResultModel(data={'member': member}, count=count)
+        # return jsonable_encoder(member)
+        return {'data': member}
+        # return ResultModel(data={'member': member}, count=count)
     except Exception as e:
         # print_debug(e)
         status_code, message = handle_exception(e)

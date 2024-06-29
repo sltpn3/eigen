@@ -49,8 +49,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             filter_args = []
             for attr, value in filters.items():
                 if re.search("_like$", attr):
-                    filter_args.append(getattr(self.model, attr.replace(
-                        '_like', '')).like('%{}%'.format(value)))
+                    if value:
+                        filter_args.append(getattr(self.model, attr.replace(
+                            '_like', '')).like('%{}%'.format(value)))
                 else:
                     filter_args.append(getattr(self.model, attr) == value)
             query = query.filter(*filter_args)
