@@ -28,7 +28,7 @@ class ResultModel(BaseModel):
     status: Optional[bool] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 ResultModel.model_rebuild()
