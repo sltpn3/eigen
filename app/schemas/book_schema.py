@@ -18,9 +18,11 @@ class Book(Base):
     created_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, nullable=True)
 
+    available = None
+
     # Relationship
-    # borrowed_by = relationship(
-    #     "Member",
-    #     secondary=association_table,
-    #     back_populates="borrows"
-    # )
+    borrowed_by = relationship(
+        "Borrow",
+        primaryjoin='and_(Borrow.book_id==Book.id, Borrow.is_returned==0)'
+        # secondary=association_table
+    )

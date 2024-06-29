@@ -17,3 +17,4 @@ class Borrow(Base):
 
     # Relationship
     book = relationship('Book')
+    member = relationship('Member')
