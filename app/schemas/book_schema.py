@@ -2,6 +2,7 @@ from sqlalchemy import (Integer, String, Column, Boolean,
                         DateTime, Text, Float, Date)
 from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.orm import relationship
+from app.schemas.borrow_schema import association_table
 
 from app.db.base_class import Base
 
@@ -16,3 +17,10 @@ class Book(Base):
     amount = Column(Integer)
     created_at = Column(DateTime, nullable=True)
     updated_at = Column(DateTime, nullable=True)
+
+    # Relationship
+    borrowed_by = relationship(
+        "Member",
+        secondary=association_table,
+        back_populates="borrows"
+    )
