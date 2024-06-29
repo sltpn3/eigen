@@ -5,10 +5,11 @@ from app.db.base_class import Base
 
 '''Relationship Schemas between jaringan_relawan dan wilayah'''
 
-association_table = Table('borrow', Base.metadata,
-                          Column('member_id', ForeignKey(
-                              'member.id'), primary_key=True),
-                          Column('book_id', ForeignKey(
-                              'book.id'), primary_key=True),
-                          Column('borrow_date', Date, nullable=False),
-                          Column('is_returned', Boolean, default=False))
+
+class Borrow(Base):
+    book_id = Column(Integer, ForeignKey(
+        'book.id'), primary_key=True, index=True)
+    member_id = Column(Integer, ForeignKey(
+        'member.id'), primary_key=True, index=True)
+    date = Column(Date, nullable=False)
+    is_returned = Column(Boolean, default=False)

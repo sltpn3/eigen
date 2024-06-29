@@ -33,6 +33,7 @@ async def search_member(
         # return ResultModel(data={'member': member}, count=count)
     except Exception as e:
         # print_debug(e)
+        print(e)
         status_code, message = handle_exception(e)
         response.status_code = status_code
         return ResultModel(message=message)

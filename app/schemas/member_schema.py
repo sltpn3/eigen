@@ -4,7 +4,8 @@ from sqlalchemy.dialects.mysql import LONGTEXT
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
-from app.schemas.borrow_schema import association_table
+# from app.schemas.borrow_schema import association_table
+# from app.schemas.book_schema import Book
 
 '''DB Schema provinsi'''
 
@@ -19,8 +20,8 @@ class Member(Base):
     penalized_until = Column(Date, nullable=True)
 
     # Relationship
-    borrows = relationship(
-        "Book",
-        secondary=association_table,
-        back_populates="borrowed_by"
-    )
+    # borrows = relationship(
+    #     "Book",
+    #     secondary=association_table,
+    #     back_populates="borrowed_by")
+    
