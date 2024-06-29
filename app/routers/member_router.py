@@ -58,3 +58,24 @@ async def borrow_book(
         status_code, message = handle_exception(e)
         response.status_code = status_code
         return ResultModel(message=message)
+    
+@router.post('/{member_code}/return/{book_code}', responses=http_response(200, ResultModel))
+async def return_book(
+        *,
+        book_code:str,
+        member_code:str,
+        db: Session = Depends(get_db),
+        response: Response
+):
+    try:
+        obj = service.returns(
+            db, member_code, book_code)
+        # return jsonable_encoder(member)
+        return {'data': obj}
+        # return ResultModel(data={'member': member}, count=count)
+    except Exception as e:
+        # print_debug(e)
+        print(e)
+        status_code, message = handle_exception(e)
+        response.status_code = status_code
+        return ResultModel(message=message)

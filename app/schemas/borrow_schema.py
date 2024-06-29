@@ -17,5 +17,5 @@ class Borrow(Base):
     is_returned = Column(Boolean, default=False)
 
     # Relationship
-    book = relationship('Book')
-    member = relationship('Member')
+    book = relationship('Book', back_populates='borrowed_by')
+    member = relationship('Member', back_populates='borrows')

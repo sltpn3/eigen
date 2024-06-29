@@ -46,3 +46,26 @@ def borrows(db: Session, member_code: str, book_code: str):
 
     else:
         raise not_found_exception
+
+
+def returns(db: Session, member_code: str, book_code: str):
+    member: Member = crud.member.get_by_code(db, member_code)
+    book: Book = crud.book.get_by_code(db, book_code)
+    borrow: Borrow = db.query(Borrow).filter(Borrow.book == book,
+                                             Borrow.member == member,
+                                             Borrow.is_returned == False).first()
+    # check if this user borrow this book
+    if borrow:
+        # check if returned after 7 days
+        if date.today() > borrow.date + timedelta(days=7):
+            # add penalty
+            member.penalized_until = date.today()+timedelta(days=3)
+            db.add(member)
+
+        borrow.is_returned = True
+        db.add(borrow)
+        db.commit()
+        db.refresh(borrow)
+        return borrow
+    else:
+        return not_found_exception

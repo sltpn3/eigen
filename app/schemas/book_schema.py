@@ -27,6 +27,6 @@ class Book(Base):
     # Relationship
     borrowed_by = relationship(
         "Borrow",
-        primaryjoin='and_(Borrow.book_id==Book.id, Borrow.is_returned==0)'
-        # secondary=association_table
+        primaryjoin='and_(Borrow.book_id==Book.id, Borrow.is_returned==0)',
+        back_populates='book'
     )

@@ -24,6 +24,6 @@ class Member(Base):
     # Relationship
     borrows = relationship(
         "Borrow",
-        primaryjoin='and_(Borrow.member_id==Member.id, Borrow.is_returned==0)'
-        # secondary=association_table
+        primaryjoin='and_(Borrow.member_id==Member.id, Borrow.is_returned==0)',
+        back_populates='member'
     )
