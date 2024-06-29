@@ -19,6 +19,8 @@ class Member(Base):
     is_active = Column(Boolean, default=True)
     penalized_until = Column(Date, nullable=True)
 
+    books_borrowed = None
+
     # Relationship
     borrows = relationship(
         "Borrow",

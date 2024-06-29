@@ -12,7 +12,8 @@ def search_member(db: Session, filters: MemberSearch, start=0, limit=10,
         limit=limit, orders=order, columns=columns)
     
     for member in members:
-        member.borrows
+        # member.borrows
+        member.books_borrowed = len(member.borrows)
         for borrow in member.borrows:
             borrow.book
 
