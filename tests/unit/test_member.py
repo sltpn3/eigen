@@ -1,3 +1,6 @@
+from datetime import date, timedelta
+from app.schemas.book_schema import Book
+from app.schemas.borrow_schema import Borrow
 from ._imports import *
 # from app.libs.auth import get_hash, verify_hash
 from app.schemas.member_schema import Member
@@ -25,7 +28,7 @@ class TestMemberAsync(TestsAsync):
 
         # db.close()
 
-    def test_borrow_book_member_not_found(self):
+    def test_borrow_book_exception(self):
         # test book not exist
         with self.assertRaises(Exception) as e:
             result = service.borrows(
@@ -46,3 +49,45 @@ class TestMemberAsync(TestsAsync):
                 self.db, member_code='M005', book_code='XXX-1')
         self.assertIsInstance(e.exception, HTTPException)
         self.assertEqual(404, e.exception.status_code)
+
+        # member currently borrow 2 books
+        member1 = self.db.query(Member).filter(Member.id == 1).first()
+        book1 = self.db.query(Book).filter(Book.id == 1).first()
+        borrow1 = Borrow()
+        borrow1.book = book1
+        borrow1.member = member1
+        borrow1.date = date.today()
+        book2 = self.db.query(Book).filter(Book.id == 2).first()
+        borrow2 = Borrow()
+        borrow2.book = book2
+        borrow2.member = member1
+        borrow2.date = date.today()
+
+        self.db.add(borrow1)
+        self.db.add(borrow2)
+        self.db.commit()
+
+        with self.assertRaises(Exception) as e:
+            result = service.borrows(
+                self.db, member_code='M001', book_code='TW-11')
+        self.assertIsInstance(e.exception, HTTPException)
+        self.assertEqual(401, e.exception.status_code)
+
+        # book currently borrowed by other member
+        member2 = self.db.query(Member).filter(Member.id == 2).first()
+        with self.assertRaises(Exception) as e:
+            result = service.borrows(
+                self.db, member_code='M002', book_code='JK-45')
+        self.assertIsInstance(e.exception, HTTPException)
+        self.assertEqual(401, e.exception.status_code)
+
+        # member is penalized
+        member3 = self.db.query(Member).filter(Member.id == 3).first()
+        member3.penalized_until = date.today()+timedelta(days=3)
+        self.db.add(member3)
+        self.db.commit()
+        with self.assertRaises(Exception) as e:
+            result = service.borrows(
+                self.db, member_code='M003', book_code='TW-11')
+        self.assertIsInstance(e.exception, HTTPException)
+        self.assertEqual(401, e.exception.status_code)
