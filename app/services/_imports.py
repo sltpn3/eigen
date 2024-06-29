@@ -3,7 +3,9 @@ from app.libs.deps import *
 # from app.libs.eBeanstalk import Pusher
 from app.libs.exc import (not_found_exception,
                           credentials_exception,
-                          inactive_exception)
+                          inactive_exception,
+                          member_penalized_exception,
+                          borrow_limit_exception)
 from datetime import datetime, timedelta
 from fastapi import UploadFile, Query
 from fastapi.encoders import jsonable_encoder

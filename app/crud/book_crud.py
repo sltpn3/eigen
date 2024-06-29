@@ -13,7 +13,8 @@ ModelType = TypeVar("ModelType", bound=Base)
 
 
 class CRUDBook(CRUDBase[Book, BookCreate, BookUpdate]):
-    ...
+    def get_by_code(self, db: Session, code: str) -> Optional[ModelType]:
+        return db.query(self.model).filter(self.model.code == code).first()
 
 
 book = CRUDBook(Book)

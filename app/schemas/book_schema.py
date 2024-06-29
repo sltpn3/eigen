@@ -20,6 +20,10 @@ class Book(Base):
 
     available = None
 
+    @property
+    def get_available(self):
+        return self.amount - len(self.borrowed_by)
+
     # Relationship
     borrowed_by = relationship(
         "Borrow",

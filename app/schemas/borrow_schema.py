@@ -8,10 +8,11 @@ from app.schemas.book_schema import Book
 
 
 class Borrow(Base):
+    id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey(
-        'book.id'), primary_key=True, index=True)
+        'book.id'), index=True)
     member_id = Column(Integer, ForeignKey(
-        'member.id'), primary_key=True, index=True)
+        'member.id'), index=True)
     date = Column(Date, nullable=False)
     is_returned = Column(Boolean, default=False)
 

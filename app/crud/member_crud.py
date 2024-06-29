@@ -13,7 +13,8 @@ ModelType = TypeVar("ModelType", bound=Base)
 
 
 class CRUDMember(CRUDBase[Member, MemberCreate, MemberUpdate]):
-    ...
+    def get_by_code(self, db: Session, code: str) -> Optional[ModelType]:
+        return db.query(self.model).filter(self.model.code == code).first()
 
 
 member = CRUDMember(Member)

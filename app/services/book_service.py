@@ -12,7 +12,7 @@ def search_book(db: Session, filters: BookSearch, start=0, limit=10,
         limit=limit, orders=order, columns=columns)
 
     for book in books:
-        book.available = book.amount - len(book.borrowed_by)
+        book.available = book.get_available
         for borrow in book.borrowed_by:
             borrow.member
 

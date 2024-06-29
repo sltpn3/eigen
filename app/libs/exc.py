@@ -32,6 +32,19 @@ credentials_exception = HTTPException(
     headers={"WWW-Authenticate": "Bearer"},
 )
 
+member_penalized_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail=error_messages.MEMBER_PENALIZED,
+    headers={"WWW-Authenticate": "Bearer"},
+)
+
+borrow_limit_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail=error_messages.BORROW_LIMIT,
+    headers={"WWW-Authenticate": "Bearer"},
+)
+
+
 user_inactive_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail=error_messages.USER_INACTIVE

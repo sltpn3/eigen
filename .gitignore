@@ -1,2 +1,4 @@
 *.pyc
 eigen.db
+eigen2.db
+alembic/versions.old/*
