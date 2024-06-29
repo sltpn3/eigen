@@ -11,6 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import PlainTextResponse
 
 from app.routers.member_router import router as MemberRouter
+from app.routers.book_router import router as BookRouter
 
 app = FastAPI(
     title="EIGEN API",
@@ -27,3 +28,4 @@ async def validation_exception_handler(request, exc):
 
 
 app.include_router(MemberRouter)
+app.include_router(BookRouter)

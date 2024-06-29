@@ -1,13 +1,13 @@
 from fastapi.encoders import jsonable_encoder
 from ._imports import *
-from app.models.member_model import MemberCreate, MemberUpdate, MemberSearch
-from app.services import member_service as service
+from app.models.book_model import BookSearch
+from app.services import book_service as service
 
 import sys
 
 router = APIRouter(
-    prefix="/member",
-    tags=["Member"],
+    prefix="/book",
+    tags=["Book"],
     # dependencies=[Depends(get_token_header)],
     responses={404: {"description": "Not found"},
                400: {"description": "Bad Request"}},
@@ -15,9 +15,9 @@ router = APIRouter(
 
 
 @router.get('/', responses=http_response(200, ResultModel))
-async def search_member(
+async def search_book(
         *,
-        filters: MemberSearch = Depends(),
+        filters: BookSearch = Depends(),
         start: int = 0,
         limit: int = 10,
         order: Union[List[str], None] = Query(
@@ -26,7 +26,7 @@ async def search_member(
         response: Response,
 ):
     try:
-        objs, count = service.search_member(
+        objs, count = service.search_book(
             db, filters, start, limit, order, None)
         # return jsonable_encoder(member)
         return {'data': objs}
