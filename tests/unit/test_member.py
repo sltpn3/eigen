@@ -91,3 +91,11 @@ class TestMemberAsync(TestsAsync):
                 self.db, member_code='M003', book_code='TW-11')
         self.assertIsInstance(e.exception, HTTPException)
         self.assertEqual(401, e.exception.status_code)
+
+    def test_borrow_book(self):
+        result = service.borrows(
+            self.db, member_code='M001', book_code='JK-45')
+        self.assertEqual(result.date, date.today())
+        self.assertFalse(result.is_returned)
+        self.assertEqual(result.member.code, 'M001')
+        self.assertEqual(result.book.code, 'JK-45')
