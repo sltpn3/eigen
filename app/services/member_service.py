@@ -68,4 +68,4 @@ def returns(db: Session, member_code: str, book_code: str):
         db.refresh(borrow)
         return borrow
     else:
-        return not_found_exception
+        raise not_found_exception

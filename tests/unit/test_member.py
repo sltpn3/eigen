@@ -67,9 +67,11 @@ class TestMemberAsync(TestsAsync):
         self.db.add(borrow2)
         self.db.commit()
 
+        book3 = self.db.query(Book).filter(Book.id == 3).first()
+
         with self.assertRaises(Exception) as e:
             result = service.borrows(
-                self.db, member_code='M001', book_code='TW-11')
+                self.db, member_code=member1.code, book_code=book3.code)
         self.assertIsInstance(e.exception, HTTPException)
         self.assertEqual(401, e.exception.status_code)
 
@@ -77,7 +79,7 @@ class TestMemberAsync(TestsAsync):
         member2 = self.db.query(Member).filter(Member.id == 2).first()
         with self.assertRaises(Exception) as e:
             result = service.borrows(
-                self.db, member_code='M002', book_code='JK-45')
+                self.db, member_code=member2.code, book_code=book1.code)
         self.assertIsInstance(e.exception, HTTPException)
         self.assertEqual(401, e.exception.status_code)
 
@@ -88,14 +90,52 @@ class TestMemberAsync(TestsAsync):
         self.db.commit()
         with self.assertRaises(Exception) as e:
             result = service.borrows(
-                self.db, member_code='M003', book_code='TW-11')
+                self.db, member_code='M003', book_code=book3.code)
         self.assertIsInstance(e.exception, HTTPException)
         self.assertEqual(401, e.exception.status_code)
 
     def test_borrow_book(self):
+        member1 = self.db.query(Member).filter(Member.id == 1).first()
+        book1 = self.db.query(Book).filter(Book.id == 1).first()
         result = service.borrows(
-            self.db, member_code='M001', book_code='JK-45')
+            self.db, member_code=member1.code, book_code=book1.code)
         self.assertEqual(result.date, date.today())
         self.assertFalse(result.is_returned)
-        self.assertEqual(result.member.code, 'M001')
-        self.assertEqual(result.book.code, 'JK-45')
+        self.assertEqual(result.member.code, member1.code)
+        self.assertEqual(result.book.code, book1.code)
+
+    def test_return_book_exception(self):
+        with self.assertRaises(Exception) as e:
+            service.returns(
+                self.db, member_code='M001', book_code='JK-45')
+        self.assertIsInstance(e.exception, HTTPException)
+        self.assertEqual(404, e.exception.status_code)
+
+    def test_return_book(self):
+        member1 = self.db.query(Member).filter(Member.id == 1).first()
+        book1 = self.db.query(Book).filter(Book.id == 1).first()
+        borrow1 = Borrow()
+        borrow1.book = book1
+        borrow1.member = member1
+        borrow1.date = date.today()
+        self.db.add(borrow1)
+        self.db.commit()
+
+        result = service.returns(
+            self.db, member_code=member1.code, book_code=book1.code)
+        self.assertTrue(result.is_returned)
+
+    def test_return_book_late(self):
+        member1 = self.db.query(Member).filter(Member.id == 1).first()
+        book1 = self.db.query(Book).filter(Book.id == 1).first()
+        borrow1 = Borrow()
+        borrow1.book = book1
+        borrow1.member = member1
+        borrow1.date = date.today()-timedelta(days=8)
+        self.db.add(borrow1)
+        self.db.commit()
+        result = service.returns(
+            self.db, member_code=member1.code, book_code=book1.code)
+        self.assertTrue(result.is_returned)
+        self.db.refresh(member1)
+        self.assertGreater(member1.penalized_until, date.today())
